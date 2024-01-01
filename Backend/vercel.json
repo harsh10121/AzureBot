@@ -1,7 +1,7 @@
 {
-    "functions": {
-      "api/*": {
-        "runtime": "@vercel/node"
-      }
+  "functions": {
+    "api/*": {
+      "runtime": "@vercel/node@latest"
     }
   }
+}
