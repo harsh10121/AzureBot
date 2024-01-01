@@ -14,6 +14,12 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(express.static("public"));
 
+const corsOptions = {
+    origin: "https://good-space-task.vercel.app",
+    methods: ["POST", "GET"],
+    credentials: true
+};
+
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "https://good-space-task.vercel.app");
     res.header("Access-Control-Allow-Methods", "GET, POST");
@@ -29,10 +35,7 @@ app.use(cors({
 }));
 
 const io = new Server(server,{
-    cors:{
-        origin:"https://good-space-task.vercel.app/",
-        method:["GET","POST"],
-    }
+    cors:corsOptions
 });
 
 const openai = new OpenAI({

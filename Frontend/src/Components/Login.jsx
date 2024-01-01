@@ -15,19 +15,12 @@ function Login({handleUserID,socket}){
 
     async function handleClick(){
         //send data to server
-        await fetch("https://goodspacet1.onrender.com/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email: cred.email, password: cred.password }),
-        })
-        .then(function(response){
-            return response.json();
-        })
-        .then(function(response){
-            handleUserID({id:response.id,email:cred.email});
-        });
+        const response = await axios.post("https://goodspacet1.onrender.com/login", {
+            email: cred.email,
+            password: cred.password
+        },{withCredentials: true});
+        
+        handleUserID({id:response.data.id,email:cred.email});
         navigate("/home");
         setCred({email:"",password:""});
     }

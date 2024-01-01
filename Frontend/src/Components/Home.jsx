@@ -49,7 +49,7 @@ function Home({userID,email,socket}){
 
         async function history() {
             try {
-                const resp = await axios.post("https://goodspacet1.onrender.com/data", { id: userID });
+                const resp = await axios.post("https://goodspacet1.onrender.com/data", { id: userID },{withCredentials: true});
 
                 if (!cancelRequest && resp.data.messages) {
                     setThread(resp.data.messages);
@@ -105,7 +105,7 @@ function Home({userID,email,socket}){
             {
                 setLoading(true);
                 const msg = (thread.length===0?"":thread[thread.length-1].chat);
-                const response = await axios.post("https://goodspacet1.onrender.com/api/audio",{msg:msg},{responseType: 'arraybuffer'});
+                const response = await axios.post("https://goodspacet1.onrender.com/api/audio",{msg:msg},{responseType: 'arraybuffer'},{withCredentials: true});
                 
                 const arrayBuffer = response.data;
                 const blob = new Blob([arrayBuffer], { type: 'audio/mp3' });
