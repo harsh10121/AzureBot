@@ -135,7 +135,7 @@ function Home({userID,email,socket}){
     };
 
     return (
-        <div className="top-container">
+        <div>
             <div>
                 <div className="block1">
                     <div className="msg">
