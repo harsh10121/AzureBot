@@ -60,7 +60,11 @@ const Thread = mongoose.model("Thread",threadSchema);
 
 
 app.get("/",async function(req,res){
-    res.json({name:"harsh bhai"});
+    res.json({name:"harsh"});
+});
+
+app.get("/*",async function(req,res){
+    res.redirect("https://good-space-task.vercel.app");
 });
 
 app.post("/login",async function(req,res){
