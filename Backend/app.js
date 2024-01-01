@@ -10,23 +10,23 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const bcrypt = require("bcrypt");
 
-app.use(cors());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(express.static("public"));
 
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'https://good-space-task.vercel.app');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    res.header('Access-Control-Allow-Credentials', 'true');
-  
-    if (req.method === 'OPTIONS') {
-      return res.sendStatus(200);
-    }
-  
+    res.header("Access-Control-Allow-Origin", "https://good-space-task.vercel.app");
+    res.header("Access-Control-Allow-Methods", "GET, POST");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Credentials", 'true');
     next();
 });
+
+app.use(cors({
+    origin:["https://good-space-task.vercel.app"],
+    methods:["POST","GET"],
+    credentials: true
+}));
 
 const io = new Server(server,{
     cors:{
