@@ -26,7 +26,7 @@ function Home({userID,email,socket}){
 
     useEffect(function(){
         if(!userID){
-            navigate("https://good-space-task.vercel.app/");
+            navigate("/");
         }
     },[]);
 

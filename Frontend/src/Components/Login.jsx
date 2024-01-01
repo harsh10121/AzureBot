@@ -28,7 +28,7 @@ function Login({handleUserID,socket}){
         .then(function(response){
             handleUserID({id:response.id,email:cred.email});
         });
-        navigate("https://good-space-task.vercel.app/home");
+        navigate("/home");
         setCred({email:"",password:""});
     }
 

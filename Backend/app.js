@@ -10,7 +10,10 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const bcrypt = require("bcrypt");
 
-app.use(cors());
+app.use(cors({
+    origin:"https://good-space-task.vercel.app/",
+    method:["GET","POST"]
+}));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(express.static("public"));

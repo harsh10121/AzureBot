@@ -22,8 +22,8 @@ function App(){
         <div className="main">
             <BrowserRouter>
                 <Routes>
-                    <Route path="https://good-space-task.vercel.app/" element={<Login handleUserID={handleUserID} socket={socket}/>}/>
-                    <Route path="https://good-space-task.vercel.app/home" element={<Home userID={userID} email={email} socket={socket}/>} />
+                    <Route path="/" element={<Login handleUserID={handleUserID} socket={socket}/>}/>
+                    <Route path="/home" element={<Home userID={userID} email={email} socket={socket}/>} />
                 </Routes>
             </BrowserRouter>
         </div>
