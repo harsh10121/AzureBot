@@ -15,7 +15,7 @@ function Login({handleUserID,socket}){
 
     async function handleClick(){
         //send data to server
-        await fetch("http://localhost:3000/login", {
+        await fetch("https://goodspacet1.onrender.com/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

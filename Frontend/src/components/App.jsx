@@ -5,7 +5,7 @@ import Home from "./Home.jsx";
 import Login from "./Login.jsx";
 
 import io from "socket.io-client";
-const socket = io.connect("http://localhost:3000");
+const socket = io.connect("https://goodspacet1.onrender.com");
 
 function App(){
 
