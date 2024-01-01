@@ -34,6 +34,7 @@ function Login({handleUserID,socket}){
 
     return (
         <div className="login">
+            <div>Login</div>
             <label>Email</label>
             <input type="text" name="email" onChange={handleChange} autoComplete="off"/>
             <label className="loginPass">Password</label>

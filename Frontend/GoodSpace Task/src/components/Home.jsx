@@ -11,15 +11,18 @@ function Home({userID,email,socket}){
     // const videoref = useRef(null);
     const [showCamera, setShowCamera] = useState(0);
 
+    const [audio] = useState(new Audio());
+    const [loading, setLoading] = useState(false);
     const [chat, setChat]=useState("");
     const [thread, setThread] = useState([]);
-    const [defaultPosition, setDefaultPosition] = useState({ x: window.innerWidth-180, y: window.innerHeight-1180});
+    const [defaultPosition, setDefaultPosition] = useState({ x:window.innerWidth-1300, y:22});
     const {
         transcript,
         listening,
         resetTranscript,
         browserSupportsSpeechRecognition
       } = useSpeechRecognition();
+    const[speak,setSpeak]=useState(0);
 
     useEffect(function(){
         if(!userID){
@@ -92,7 +95,37 @@ function Home({userID,email,socket}){
             if(prev===0)return 1;
             else return 0;
         });
-        setDefaultPosition({ x: window.innerWidth-180, y: window.innerHeight-1180});
+        
+        setDefaultPosition({ x:window.innerWidth-1300, y:22});
+    }
+
+    async function handlePlay(){
+        try {
+            if(speak===0)
+            {
+                setLoading(true);
+                const msg = (thread.length===0?"":thread[thread.length-1].chat);
+                const response = await axios.post("http://localhost:3000/api/audio",{msg:msg},{responseType: 'arraybuffer'});
+                
+                const arrayBuffer = response.data;
+                const blob = new Blob([arrayBuffer], { type: 'audio/mp3' });
+                const dataUri = URL.createObjectURL(blob);
+
+                audio.src = dataUri;
+                audio.play();
+            }
+            else{
+                audio.pause();
+            }
+        } 
+        catch (error) {
+            console.error('Error fetching and playing audio:', error);
+        } 
+        finally {
+            setLoading(false);
+            if(speak===0) setSpeak(1);
+            else setSpeak(0);
+        }
     }
 
     const videoConstraints = {
@@ -102,66 +135,63 @@ function Home({userID,email,socket}){
     };
 
     return (
-        <>
-            <div className="block1">
-                <div className="msg">
-                    <ScrollToBottom className="msg-container">
-                        {thread.map((message)=>{
-                            return (
-                                <div className="message" id={message.name === "Robo" ? "other" : "you"}>
-                                    <div className="message-child">
-                                        <div className="message-meta">
-                                            <p>{message.name}</p>
-                                        </div>
-                                        <div className="message-content">
-                                            <p>{message.chat}</p>
+        <div className="top-container">
+            <div>
+                <div className="block1">
+                    <div className="msg">
+                        <ScrollToBottom className="msg-container">
+                            {thread.map((message)=>{
+                                return (
+                                    <div className="message" id={message.name === "Robo" ? "other" : "you"}>
+                                        <div className="message-child">
+                                            <div className="message-meta">
+                                                <p>{message.name}</p>
+                                            </div>
+                                            <div className="message-content">
+                                                <p>{message.chat}</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            );
-                        })}
-                    </ScrollToBottom>
-                </div>
-            </div>
-            <div className="search">
-                <input name="chatbox" type="text" value={chat} onChange={handleChange} autoComplete="off"/>
-                <button className="plane" onClick={handleSubmit}><span className="material-icons-outlined">send</span></button>
-            </div>
-            {showCamera && 
-                <Draggable position={defaultPosition} onStop={(e, data) => setDefaultPosition({ x: data.x, y: data.y })}>
-                    <div style={{ width: '150px', height: '100px'}}>
-                        <Webcam height={100} width={150} videoConstraints={videoConstraints}/>
+                                );
+                            })}
+                        </ScrollToBottom>
                     </div>
-                </Draggable>
-            }
-            <div className="combined">
-                <div className="block2">
-                    <button onClick={handleCamera} title="Video">
-                        <span className="material-icons-outlined">video_call</span>
-                    </button>
                 </div>
-                <div className="block3" title="Turn On Mic">
-                    <button onClick={SpeechRecognition.startListening}>
-                        <span class="material-icons-outlined">mic_none</span>
-                    </button>
+                <div className="search">
+                    <input name="chatbox" type="text" value={chat} onChange={handleChange} autoComplete="off"/>
+                    <button className="plane" onClick={handleSubmit}><span className="material-icons-outlined">send</span></button>
                 </div>
-                <div className="block3" title="Turn Off Mic"> 
-                    <button onClick={SpeechRecognition.stopListening}>
-                        <span class="material-icons-outlined">mic_off</span>
-                    </button>
-                </div>
-                <div className="block3">
-                    <button onClick={resetTranscript} title="Reset Voice Text">
-                        <span class="material-icons-outlined">restart_alt</span>
-                    </button>
-                </div>
-                <div className="block3">
-                    <button title="Convert Text Into Voice">
-                        <span class="material-icons-outlined">speaker_phone</span>
-                    </button>
+                {showCamera && 
+                    <Draggable position={defaultPosition} onStop={(e, data) => setDefaultPosition({ x: data.x, y: data.y })}>
+                        <div style={{ width: '150px', height: '100px'}}>
+                            <Webcam height={100} width={150} videoConstraints={videoConstraints}/>
+                        </div>
+                    </Draggable>
+                }
+                <div className="combined">
+                    <div className="block2">
+                        <button onClick={handleCamera} title="Video">
+                            <span className="material-icons-outlined">video_call</span>
+                        </button>
+                    </div>
+                    <div className="block3" title="Turn On Mic">
+                        <button onClick={SpeechRecognition.startListening}>
+                            <span class="material-icons-outlined">mic_none</span>
+                        </button>
+                    </div>
+                    <div className="block3">
+                        <button onClick={resetTranscript} title="Reset Voice Text">
+                            <span class="material-icons-outlined">restart_alt</span>
+                        </button>
+                    </div>
+                    <div className="block3">
+                        <button title="Convert Text Into Voice" id="playButton" onClick={handlePlay} disabled={loading}>
+                            <span class="material-icons-outlined">speaker_phone</span>
+                        </button>
+                    </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 
