@@ -8,6 +8,7 @@ const http = require('http');
 const app = express();
 const server = http.createServer(app);
 const { Server } = require("socket.io");
+const bcrypt = require("bcrypt");
 
 app.use(cors());
 app.use(bodyParser.urlencoded({extended:true}));
@@ -25,7 +26,8 @@ const openai = new OpenAI({
     apiKey:process.env.OPENAI_API_KEY
 });
 
-mongoose.connect("mongodb://0.0.0.0:27017/chatDB");
+
+mongoose.connect(process.env.mongoUrl);
 
 const userSchema = new mongoose.Schema({
     email:String,
@@ -49,11 +51,14 @@ app.post("/login",async function(req,res){
     const email = req.body.email;
     const password = req.body.password;
     // put into user DB
-    const doc = await User.findOneAndUpdate({email:email},{password:password},{
-        new:true,
-        upsert:true
+
+    bcrypt.hash(password, 4, async function(err, hash) {
+        const doc = await User.findOneAndUpdate({email:email},{password:hash},{
+            new:true,
+            upsert:true
+        });
+        res.json({id:doc._id}); 
     });
-    res.json({id:doc._id});
 });
 
 app.get("/test",async function(req,res){
@@ -69,6 +74,24 @@ app.post("/data",async function(req,res){
     const data = await Thread.findOne({userid:req.body.id});
     res.send(data);
 });
+
+app.post("/api/audio",async function(req,res){
+    // take last post of particular user and send it as buffer
+    try {
+        const mp3 = await openai.audio.speech.create({
+            model: 'tts-1',
+            voice: 'alloy',
+            input: req.body.msg,
+        });
+
+        const buffer = Buffer.from(await mp3.arrayBuffer());
+        res.end(buffer,"binary");
+    } 
+    catch(error){
+        console.error('Error generating and sending audio:', error);
+    }
+});
+
 
 io.on("connection",function(socket){
     console.log(`a user connected ${socket.id}`);
@@ -86,7 +109,7 @@ io.on("connection",function(socket){
         const response = await openai.chat.completions.create({
             model:"gpt-3.5-turbo",
             messages:[{"role":"user","content":`${data.chat}`}],
-            max_tokens:70
+            max_tokens:50
         });
         //console.log(response.choices[0].message.content);
         const botMsg = {
@@ -97,15 +120,16 @@ io.on("connection",function(socket){
             chat : data.chat,
             name : data.name
         }
+
         const total = [userMsg,botMsg];
+
+        io.to(socket.id).emit("botMsg", total);
+        socket.to(data.userID).emit("botMsg",total);
 
         const messagesToInsert = [{name:data.name,chat:data.chat},{name:"Robo",chat:botMsg.chat}];
 
         const doc = await Thread.findOneAndUpdate({userid:data.userID},{$push:{messages:{$each:messagesToInsert}}},
             { upsert: true, new: true });
-
-        io.to(socket.id).emit("botMsg", total);
-        socket.to(data.userID).emit("botMsg",total);
     });
 
     socket.on("disconnect",()=>{
