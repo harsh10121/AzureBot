@@ -63,7 +63,7 @@ app.get("/",async function(req,res){
     res.json({name:"harsh"});
 });
 
-app.get("/*",async function(req,res){
+app.get("*",async function(req,res){
     res.redirect("https://good-space-task.vercel.app");
 });
 
