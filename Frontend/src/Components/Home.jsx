@@ -176,17 +176,17 @@ function Home({userID,email,socket}){
                     </div>
                     <div className="block3" title="Turn On Mic">
                         <button onClick={SpeechRecognition.startListening}>
-                            <span class="material-icons-outlined">mic_none</span>
+                            <span className="material-icons-outlined">mic_none</span>
                         </button>
                     </div>
                     <div className="block3">
                         <button onClick={resetTranscript} title="Reset Voice Text">
-                            <span class="material-icons-outlined">restart_alt</span>
+                            <span className="material-icons-outlined">restart_alt</span>
                         </button>
                     </div>
                     <div className="block3">
                         <button title="Convert Text Into Voice" id="playButton" onClick={handlePlay} disabled={loading}>
-                            <span class="material-icons-outlined">speaker_phone</span>
+                            <span className="material-icons-outlined">speaker_phone</span>
                         </button>
                     </div>
                 </div>
