@@ -88,7 +88,7 @@ app.get("/test",async function(req,res){
         max_tokens:70
     });
     console.log(response.choices[0]);
-});
+}); 
 
 app.post("/data",async function(req,res){
     const data = await Thread.findOne({userid:req.body.id});
