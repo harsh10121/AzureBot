@@ -4,8 +4,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Home from "./Home.jsx";
 import Login from "./Login.jsx";
 
+// server deployed - https://goodspacet1.onrender.com
 import io from "socket.io-client";
-const socket = io.connect("https://goodspacet1.onrender.com");
+const socket = io.connect("http://localhost:3000");
 
 function App(){
 

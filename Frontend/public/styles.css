@@ -4,7 +4,6 @@ html, body {
 }
 body{
   background-image: url("dark-nature-s3in5w7pgukadq51.jpg");
-  overflow: hidden;
   background-size: cover;
 }
 .login{
@@ -59,7 +58,7 @@ body{
   margin-left: 5%;
   backdrop-filter: blur(5px);
   background-color: rgb(255 255 255 / 0.3);
-  width: 50%;
+  width: 90%;
   height: 64vh;
   display: flex;
   flex-direction: column;
@@ -180,7 +179,7 @@ input[name="chatbox"] {
   flex-direction: row;
   justify-content: space-between;
   gap: 10px;
-  width: 50%;
+  width: 90%;
   margin-left: 5%;
 }
 .search input{
@@ -216,4 +215,27 @@ input[name="chatbox"] {
 }
 .top-container{
   display: flex;
+}
+.myAvatarVideoElement{
+  height: 400px;
+  width: 400px;
+}
+.myAvatarVideoElement{
+  margin-top: 20%;
+  opacity: 0.8;
+  border-radius: 8px !important;
+}
+.btn{
+  position: relative;
+  border-radius: 8px;
+  border: none;
+  box-shadow: 1px 1px 1px 1px black;
+  background-color: wheat;
+  padding: 10px;
+  font-family: monospace;
+  cursor: pointer;
+  left: 30%;
+}
+.btn:hover{
+  color: green;
 }

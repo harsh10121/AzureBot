@@ -1,6 +1,7 @@
 import {React,useState,useEffect} from "react"
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
+import relay from "./GetICE";
 
 function Login({handleUserID,socket}){   
     const [cred,setCred] = useState({email:"",password:""});
@@ -15,7 +16,7 @@ function Login({handleUserID,socket}){
 
     async function handleClick(){
         //send data to server
-        const response = await axios.post("https://goodspacet1.onrender.com/login", {
+        const response = await axios.post("http://localhost:3000/login", {
             email: cred.email,
             password: cred.password
         },{withCredentials: true});
@@ -24,6 +25,7 @@ function Login({handleUserID,socket}){
         navigate("/home");
         setCred({email:"",password:""});
     }
+
 
     return (
         <div className="login">

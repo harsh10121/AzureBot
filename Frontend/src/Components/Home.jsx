@@ -1,32 +1,34 @@
-import {React,useState,useRef,useEffect} from "react"
+import React,{useState,useRef,useEffect} from "react"
 import {useNavigate} from "react-router-dom";
 import ScrollToBottom from "react-scroll-to-bottom";
 import axios from "axios";
 import Webcam from "react-webcam";
 import Draggable from "react-draggable";
 import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
+import Avatar from "./Avatar";
 
 function Home({userID,email,socket}){
     const navigate = useNavigate();
     // const videoref = useRef(null);
     const [showCamera, setShowCamera] = useState(0);
 
-    const [audio] = useState(new Audio());
+    //const [audio] = useState(new Audio());
     const [loading, setLoading] = useState(false);
     const [chat, setChat]=useState("");
     const [thread, setThread] = useState([]);
-    const [defaultPosition, setDefaultPosition] = useState({ x:window.innerWidth-1300, y:22});
+    const [defaultPosition, setDefaultPosition] = useState({ x:window.innerWidth-1300, y:40});
     const {
         transcript,
         listening,
         resetTranscript,
         browserSupportsSpeechRecognition
       } = useSpeechRecognition();
-    const[speak,setSpeak]=useState(0);
+    const [speak,setSpeak]=useState(0);
+    const [msg,setMsg] = useState("");
 
     useEffect(function(){
         if(!userID){
-            navigate("/");
+            window.location.href = "/";
         }
     },[]);
 
@@ -49,7 +51,7 @@ function Home({userID,email,socket}){
 
         async function history() {
             try {
-                const resp = await axios.post("https://goodspacet1.onrender.com/data", { id: userID },{withCredentials: true});
+                const resp = await axios.post("http://localhost:3000/data", { id: userID },{withCredentials: true});
 
                 if (!cancelRequest && resp.data.messages) {
                     setThread(resp.data.messages);
@@ -84,9 +86,6 @@ function Home({userID,email,socket}){
             name:name
         };
         socket.emit("sendMsg",msg);
-        // setThread(function(prevArr){
-        //     return [...prevArr,msg];
-        // });
         setChat("");
     }
     
@@ -96,36 +95,15 @@ function Home({userID,email,socket}){
             else return 0;
         });
         
-        setDefaultPosition({ x:window.innerWidth-1300, y:22});
+        setDefaultPosition({ x:window.innerWidth-1300, y:40});
     }
 
-    async function handlePlay(){
-        try {
-            if(speak===0)
-            {
-                setLoading(true);
-                const msg = (thread.length===0?"":thread[thread.length-1].chat);
-                const response = await axios.post("https://goodspacet1.onrender.com/api/audio",{msg:msg},{responseType: 'arraybuffer'},{withCredentials: true});
-                
-                const arrayBuffer = response.data;
-                const blob = new Blob([arrayBuffer], { type: 'audio/mp3' });
-                const dataUri = URL.createObjectURL(blob);
-
-                audio.src = dataUri;
-                audio.play();
-            }
-            else{
-                audio.pause();
-            }
-        } 
-        catch (error) {
-            console.error('Error fetching and playing audio:', error);
-        } 
-        finally {
-            setLoading(false);
-            if(speak===0) setSpeak(1);
-            else setSpeak(0);
-        }
+    function handlePlay(){
+        const val = (thread.length===0?"":thread[thread.length-1].chat);
+        setMsg(val);
+    }
+    function handleStop(){
+        setMsg("");
     }
 
     const videoConstraints = {
@@ -135,7 +113,7 @@ function Home({userID,email,socket}){
     };
 
     return (
-        <div>
+        <div style={{display:"flex",gap:"10px"}}>
             <div>
                 <div className="block1">
                     <div className="msg">
@@ -185,11 +163,19 @@ function Home({userID,email,socket}){
                         </button>
                     </div>
                     <div className="block3">
-                        <button title="Convert Text Into Voice" id="playButton" onClick={handlePlay} disabled={loading}>
+                        <button title="Convert Text Into Voice" id="playButton" onClick={handlePlay}>
                             <span className="material-icons-outlined">speaker_phone</span>
                         </button>
                     </div>
+                    <div className="block3">
+                        <button title="Stop Text Into Voice" id="playButton" onClick={handleStop}>
+                            <span className="material-icons-outlined">volume_off</span>
+                        </button>
+                    </div>
                 </div>
+            </div>
+            <div className="avatar">
+                {userID?<Avatar msg={msg}/>:null}
             </div>
         </div>
     );
