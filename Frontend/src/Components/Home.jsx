@@ -163,7 +163,7 @@ function Home({userID,email,socket}){
                         </button>
                     </div>
                     <div className="block3">
-                        <button title="Convert Text Into Voice" id="playButton" onClick={handlePlay}>
+                        <button title="Convert Text Into Voice" id="playButton" onClick={handlePlay} disable={msg?1:0}>
                             <span className="material-icons-outlined">speaker_phone</span>
                         </button>
                     </div>
@@ -175,7 +175,7 @@ function Home({userID,email,socket}){
                 </div>
             </div>
             <div className="avatar">
-                {userID?<Avatar msg={msg}/>:null}
+                {userID?<Avatar msg={msg} handleStop={handleStop}/>:null}
             </div>
         </div>
     );

@@ -239,3 +239,11 @@ input[name="chatbox"] {
 .btn:hover{
   color: green;
 }
+.loading{
+  color: wheat;
+  font-family: monospace;
+  display: inline-block;
+  position: absolute;
+  right: 16%;
+  top: 26%;
+}

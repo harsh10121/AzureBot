@@ -44,7 +44,7 @@ export const createAvatarSynthesizer = () => {
         if (e.offset === 0) {
             offsetMessage = ""
         }
-        console.log("[" + (new Date()).toISOString() + "] Event received: " + e.description + offsetMessage)
+        console.log("Event received: " + e.description + offsetMessage)
     }
 
     return avatarSynthesizer;

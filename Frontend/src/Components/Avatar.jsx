@@ -3,8 +3,8 @@ import { createAvatarSynthesizer, createWebRTCConnection } from "./Connection";
 import * as SpeechSDK from "microsoft-cognitiveservices-speech-sdk";
 import { avatarAppConfig } from "./config";
 
-function Avatar({msg}){
-
+function Avatar({msg,handleStop}){
+    const [loading,setLoading] = useState(1);
     const [avatarSynthesizer, setAvatarSynthesizer] = useState(null);
     const myAvatarVideoRef = useRef();
     const myAvatarVideoEleRef = useRef();
@@ -24,6 +24,7 @@ function Avatar({msg}){
             mediaPlayer.playsInline = true;
             mediaPlayer.addEventListener('play', () => {
             window.requestAnimationFrame(()=>{});
+            setLoading(0);
           });
         } else {
           const audioPlayer = myAvatarAudioEleRef.current;
@@ -46,7 +47,8 @@ function Avatar({msg}){
         avatarSynthesizer.speakTextAsync(msg).then(
             (result) => {
                 if (result.reason === SpeechSDK.ResultReason.SynthesizingAudioCompleted) {
-                    console.log("Speech and avatar synthesized to video stream.")
+                    console.log("Speech and avatar synthesized to video stream.");
+                    handleStop();
                 } else {
                     console.log("Unable to speak. Result ID: " + result.resultId)
                     if (result.reason === SpeechSDK.ResultReason.Canceled) {
@@ -93,7 +95,8 @@ function Avatar({msg}){
         await avatarSynthesizer.startAvatarAsync(peerConnection).then((r) => {
             console.log("Avatar started");
      
-        }).catch(
+        })
+        .catch(
             (error) => {
                 console.log("Avatar failed to start. Error: " + error);
             }
@@ -111,18 +114,28 @@ function Avatar({msg}){
         }
     },[msg]);
 
+    useEffect(function(){
+
+        const id = setTimeout(function(){
+            startSession();
+        },3000);
+
+        return ()=>{
+            clearTimeout(id);
+        }
+    },[]);
 
     return(
         <div>
             <div>
                 <div>
                     <div ref={myAvatarVideoRef}>
-                        
+                        {loading===1?
+                            <h2 className="loading">Loading</h2>:null
+                        }
                         <video className="myAvatarVideoElement" ref={myAvatarVideoEleRef}></video>
-
                         <audio ref={myAvatarAudioEleRef}></audio>
-                        <button className="btn" ref={btnRef}
-                            onClick={startSession}>
+                        <button className="btn" ref={btnRef}>
                             {avatarSynthesizer?"Connected With Avatar":"Connect with Avatar"}
                         </button>
                     </div>  

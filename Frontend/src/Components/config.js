@@ -1,3 +1,4 @@
+import React from "react";
 import relay from "./GetICE";
 
 let username,credential;
@@ -12,7 +13,7 @@ set();
 
 export const avatarAppConfig = {
     cogSvcRegion : "eastus",
-    cogSvcSubKey : "bf6b0303ed4d46e6929350789ac7e30a",
+    cogSvcSubKey : import.meta.env.VITE_SPEECH_KEY,
     voiceName : "en-US-JennyNeural",
     avatarCharacter : "lisa",
     avatarStyle : "casual-sitting",
