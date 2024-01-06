@@ -16,7 +16,7 @@ function Login({handleUserID,socket}){
 
     async function handleClick(){
         //send data to server
-        const response = await axios.post("http://localhost:3000/login", {
+        const response = await axios.post("https://goodspacet1.onrender.com/login", {
             email: cred.email,
             password: cred.password
         },{withCredentials: true});

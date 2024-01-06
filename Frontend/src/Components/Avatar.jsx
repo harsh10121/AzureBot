@@ -11,9 +11,9 @@ function Avatar({msg,handleStop}){
     const myAvatarAudioEleRef = useRef();
     const btnRef = useRef();
 
-    var iceUrl = avatarAppConfig.iceUrl
-    var iceUsername = avatarAppConfig.iceUsername
-    var iceCredential = avatarAppConfig.iceCredential
+    var iceUrl = avatarAppConfig.iceUrl;
+    var iceUsername = avatarAppConfig.iceUsername;
+    var iceCredential = avatarAppConfig.iceCredential;
 
     const handleOnTrack = (event) => {
         if (event.track.kind === 'video') {
@@ -136,7 +136,7 @@ function Avatar({msg,handleStop}){
                         <video className="myAvatarVideoElement" ref={myAvatarVideoEleRef}></video>
                         <audio ref={myAvatarAudioEleRef}></audio>
                         <button className="btn" ref={btnRef}>
-                            {avatarSynthesizer?"Connected With Avatar":"Connect with Avatar"}
+                            {avatarSynthesizer?"Connected With Avatar":"Setting connection with Avatar"}
                         </button>
                     </div>  
                 </div>

@@ -13,15 +13,15 @@ const bcrypt = require("bcrypt");
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(express.static("public"));
-// deployed - https://good-space-task.vercel.app
+
 const corsOptions = {
-    origin: "http://localhost:5173",
+    origin: "https://good-space-task.vercel.app",
     methods: ["POST", "GET"],
     credentials: true
 };
 
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "http://localhost:5173");
+    res.header("Access-Control-Allow-Origin", "https://good-space-task.vercel.app");
     res.header("Access-Control-Allow-Methods", "GET, POST");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.header("Access-Control-Allow-Credentials", 'true');
@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 });
 
 app.use(cors({
-    origin:["http://localhost:5173"],
+    origin:["https://good-space-task.vercel.app"],
     methods:["POST","GET"],
     credentials: true
 }));

@@ -51,7 +51,7 @@ function Home({userID,email,socket}){
 
         async function history() {
             try {
-                const resp = await axios.post("http://localhost:3000/data", { id: userID },{withCredentials: true});
+                const resp = await axios.post("https://goodspacet1.onrender.com/data", { id: userID },{withCredentials: true});
 
                 if (!cancelRequest && resp.data.messages) {
                     setThread(resp.data.messages);
