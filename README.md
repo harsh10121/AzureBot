@@ -1,6 +1,6 @@
 # Application's Architecture
 
-A real time chat application with camera and microphone integration, leveraging OpenAI's API, Socket.io, and MongoDB. The app also features text to speech and speech to text capabilities.
+A real time chat application with camera and microphone integration, leveraging OpenAI's API, Socket.io, WebRTC, and MongoDB. The app also features text to speech and speech to text capabilities.
 
 In the App, Node.js is used to provide runtime environment, React JS- a frontend library- is used to interact with the clients, MongoDB -a NoSQL databases- is used to store chat history and user history, Express JS which is a backend framework is used to handle API requests from client, Socket.io is used to provide real time communication between client and AI.
 
@@ -29,7 +29,7 @@ Client
 - botMsg , Response as user text and AI response
 
 # Setup
-For setting up project NPM, Node.js, MongoDB, Express, Socket.io, React(using vite or create-react-app), dotEnv, Mongoose, react-router-dom, axios, socket.io-client, react-scroll-to-bottom and some for webCam and microphone has been used. (Majorly will be installed using NPM).
+For setting up project NPM, Node.js, MongoDB, Express, Socket.io, React(using vite or create-react-app), dotEnv, Mongoose, react-router-dom, axios, socket.io-client, react-scroll-to-bottom, Azure, WebRTC and some for webCam and microphone has been used. (Majorly will be installed using NPM).
 
 # User Guide
 - A Login section will be visible to users who will follow the production link of repository, which is build using react and deployed on vercel, and server is hosted on render so it can take some time to respond against your login request.
@@ -38,7 +38,8 @@ For setting up project NPM, Node.js, MongoDB, Express, Socket.io, React(using vi
   - Video
   - Mic On
   - Reset text you spoken
-  - Text to speech conversion Button
+  - Text to speech conversion Button via Avatar
+  - Stop Avatar
 - Camera is Draggable so users can adjust accordingly
 
 # Troubleshooting while deploying
